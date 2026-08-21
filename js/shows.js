@@ -27,8 +27,15 @@ var SHOWS = [
 ]
 
 function splitShows(shows){
-    var past = shows.filter((show) => new Date(show.date) < new Date());
-    var upcoming = shows.filter((show) => new Date(show.date) >= new Date()).toReversed()
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    function isPast(date) {
+        const dateB = new Date(date);
+        dateB.setHours(0, 0, 0, 0);
+        return dateB - today < 0;
+    }
+    var past = shows.filter((show) => isPast(show.date));
+    var upcoming = shows.filter((show) => !isPast(show.date)).toReversed()
     if (upcoming.length == 0) {
         upcoming = [{date: null, city: "More information soon", venue: ''}]
     }
